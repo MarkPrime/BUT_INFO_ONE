@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="utf-8" />
+	<title>Les îles du Ponant</title>
+	<link rel="stylesheet" href="css/normalize.css">
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	<header>
+		<img src="img/logo.png" alt="LOGO">
+	</header>
+	<nav>
+		<ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="iles.html">Les îles</a></li>
+            <li><a href="documentation.html">Documentation</a></li>
+	        <li><a href="contact.html">Nous contacter</a></li>	
+        </ul>
+	</nav>
+	<main>
+		<section>
+			<header>
+				<h1>Demander de la documentation</h1>
+				<ul>
+					<li>Vous voulez en savoir davantage sur les îles du Ponant ?</li>
+					<li>Vous envisagez de visiter ces îles ?</li>
+				</ul>
+			</header>
+				<blockquote>Afin de miex cibler votre demande merci de préciser quelques informations :</blockquote>
+				<form action="form">
+					<label for="Prenom">Prénom</label>
+					<input type="text">
+					<br>
+					<label for="nom">Nom</label>
+					<input type="text">
+					<br>
+					<label for="Addres">Adresse mail</label>
+					<input type="email">
+				</form>
+				<fieldset>
+					<legend>J'envisage de voyager</legend>
+					<input type="radio" value="seul" name="seul">
+					<label for="seul">Seul</label>
+					<br>
+					<input type="radio" value="famille" name="seul">
+					<label for="famille">En famille</label>
+					<br>
+					<input type="radio" value="groupe" name="seul">
+					<label for="groupe">En groupe</label>
+					<br>
+					<label for="nbpersonness">Si je ne voyage pas seul, nous serons </label>
+					<input type="number" id="nbpersonness" value="3" max="10" min="2">
+					<label for="nbpersonness">personnes.</label>
+				</fieldset>
+				<fieldset>
+					<legend>Je suis particulièrement intéréssé par</legend>
+					<div class="doc">
+						<input type="checkbox" value="chausey" name="chausey">
+						<label for="chausey">Chausey</label>
+					</div>
+					<div class="doc">
+						<input type="checkbox" value="bréhad" name="bréhad">
+						<label for="bréhad">Bréhad</label>
+					</div>
+					<div class="doc">
+						<input type="checkbox" value="Barz" name="Barz">
+						<label for="Barz">Barz</label>
+					</div>
+					<div class="doc">
+						<input type="checkbox" value="Ouessant" name="Ouessant">
+						<label for="Ouessant">Ouessant</label>
+					</div>
+					<div class="doc">
+						<input type="checkbox" value="Molène" name="Molène">
+						<label for="Molène">Molène</label>	
+					</div>
+					<div class="doc">
+						<input type="checkbox" value="Ile de Sein" name="Ile de Sein">
+						<label for="Ile de Sein">Ile de Sein</label>
+					</div>
+					<div class="doc">
+						<input type="checkbox" value="Ile de Groix" name="Ile de Groix">
+						<label for="Ile de Groix">Ile de Groix</label>
+					</div>
+					<div class="doc">
+						<input type="checkbox" value="Ile d'Yeu" name="Ile d'Yeu">
+						<label for="Ile d'Yeu">Ile d'Yeu</label>
+					</div>
+					<div class="doc">
+						<input type="checkbox" value="Ile d'Oléron" name="Ile d'Oléron">
+						<label for="Ile d'Oléron">Ile d'Oléron</label>
+					</div>
+					<div class="doc">
+						<input type="checkbox" value="Ile de Ré" name="Ile de Ré">
+						<label for="Ile de Ré">Ile de Ré</label>
+					</div>
+					<div class="doc">
+						<input type="checkbox" value="Ile d'Aix" name="Ile d'Aix">
+						<label for="Ile d'Aix">Ile d'Aix</label>
+					</div>
+					<div class="doc">
+						<input type="checkbox" value="Ile d'Oléron" name="Ile d'Oléron">
+						<label for="Ile d'Oléron">Ile d'Oléron</label>
+					</div>
+					<div class="doc">
+						<input type="checkbox" value="Ile Madame" name="Ile Madame">
+						<label for="Ile Madame">Ile Madame</label>
+					</div>
+				</fieldset>
+				<p>Commentaire ou demande spécifique<textarea ></textarea><input type="button" value="Valider ma demande"></p>
+		</section>
+	</main>
+	<hr>
+	<footer>
+		<p>IUT Robert Shuman 72 Route du Rhin - 67411 Ilkirch Cedex</p>
+	</footer>
+</body>
+</html>

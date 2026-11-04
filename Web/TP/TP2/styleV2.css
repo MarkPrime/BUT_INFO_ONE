@@ -1,0 +1,37 @@
+section {
+    border: 2px solid black;
+    margin: 10px;
+}
+
+section p {
+    margin: 10px;
+    padding: 5px;
+}
+
+section#haut p {
+    border: 4px dotted blue;
+    text-align: center;
+}
+section#haut {
+    display: block;
+    height: 50%;
+}
+
+section#milieu p {
+    border: 4px dotted green;
+    text-align: right;
+}
+section#milieu {
+    display: inline;
+    line-height: 2;
+}
+section#bas {
+    display: inline-block;
+    height: 30%;
+}
+
+section#bas p {
+    border: 4px dotted red;
+    text-align: justify;
+    display: inline-block;
+}

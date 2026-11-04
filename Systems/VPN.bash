@@ -1,0 +1,1 @@
+sudo openfortivpn vpn.unistra.fr:443 -u vuy

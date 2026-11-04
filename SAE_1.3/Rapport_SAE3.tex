@@ -1,0 +1,145 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage{graphicx}
+\usepackage[margin=1.6cm]{geometry}
+\usepackage{lmodern}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\pagestyle{plain}
+\sloppy
+
+% Placer les cinq captures dans le dossier photos/.
+% Le PDF se compile meme si les images sont absentes.
+\newcommand{\capture}[2]{%
+  \begin{center}
+  \IfFileExists{photos/#1}{%
+    \includegraphics[width=0.97\linewidth,height=9.0cm,keepaspectratio]{photos/#1}%
+  }{%
+    \fbox{\parbox[c][3.3cm][c]{0.89\linewidth}{\centering
+      Capture a inserer : \texttt{#1}}}%
+  }%
+  \par\vspace{2pt}{\footnotesize\textit{#2}}
+  \end{center}
+}
+\begin{document}
+\begin{center}
+{\Large \textbf{SAE 1.3 -- Administration d'une machine virtuelle Debian}}\\[4pt]
+Compte rendu des phases 1, 2 et 3
+\end{center}
+\textbf{Groupe :} TD1 \hfill \textbf{Binôme :} VUY Mark, Oikin Ivan\\
+\textbf{VM :} \texttt{SAE13-vuy} \hfill \textbf{IP de VM :} 10.50.12.135
+
+\section*{1. Phase 1 -- Création et installation}
+La machine virtuelle a été créée sur Proxmox VE (hyperviseur \texttt{etukvm2} ou \texttt{etukvm3}), dans le pool attribué, avec \textbf{2 Gio de RAM, 1 vCPU et 6 Gio de disque} sur \texttt{local-lvm}. Aucune carte réseau n'a été ajoutée à la création.
+
+Debian 13 (Trixie) a été installé depuis l'ISO \texttt{netinst}, sans miroir réseau, avec un compte root, un compte utilisateur local et un partitionnement \textbf{LVM non chiffré} comportant un \texttt{/home} dédié. La VM a ensuite été redémarrée.
+
+\textbf{Migration.} La migration entre \texttt{etukvm2} et \texttt{etukvm3} a été testée, puis la VM a été remise sur l'hôte initial. Lors d'une migration à chaud, l'état d'exécution (mémoire, état processeur) est transféré ; les disques sur un stockage partagé ne sont pas nécessairement copiés. L'observation du terminal permet de vérifier la continuité du fonctionnement. Proxmox VE utilise KVM/QEMU ; KVM est généralement classé comme hyperviseur de type 1.
+
+\textbf{Édition.} L'éditeur \texttt{vim} a été découvert avec \texttt{vimtutor}. Commandes utiles : \texttt{i} (insertion), \texttt{Esc} (mode normal), \texttt{:wq} (enregistrer et quitter).
+
+\capture{01-proxmox.png}{Proxmox : VM, mémoire, processeur, disque système et périphériques ajoutés.}
+
+\textbf{Bilan :} une VM Debian accessible par console, avec LVM et une configuration conforme aux consignes.
+
+\newpage
+\section*{2. Phase 2 -- Matériel et réseau}
+\textbf{Périphériques ajoutés :} une carte réseau \texttt{VirtIO} sur le bridge \texttt{vmbr1}, VLAN \texttt{317}, MAC automatique ; un disque supplémentaire de \textbf{1 Gio} (SCSI/VirtIO) sur \texttt{local-lvm}.
+
+\textbf{Réponses.} Une adresse MAC identifie une interface sur le réseau local. VirtIO évite une émulation matérielle lourde et améliore les performances. Parmi les modèles réseau : VirtIO, E1000 et RTL8139 ; pour les disques : IDE, SATA, SCSI et VirtIO. Le \emph{hotplug} est l'ajout de matériel à chaud : il dépend du périphérique, du contrôleur et de la configuration de la VM. Sa détection se vérifie avec \texttt{dmesg} et \texttt{lsblk}.
+
+\textbf{DHCP.} Après identification de la carte avec \texttt{ip link}, le fichier \texttt{/etc/network/interfaces.d/ens18} a été créé avec exactement deux lignes (adapter le nom réel) :
+\begin{verbatim}
+auto ens18
+iface ens18 inet dhcp
+\end{verbatim}
+La carte a été activée par \texttt{ifup ens18}, désactivée par \texttt{ifdown ens18}, puis contrôlée avec \texttt{ip a s} et \texttt{ip route}.
+
+\textbf{Environnement root.} La variable \texttt{PATH} a été affichée huit fois dans différents environnements. Les commandes \texttt{su}, \texttt{su -}, \texttt{sudo bash} et \texttt{sudo -i bash} ont été comparées avec \texttt{env} et \texttt{diff}. Pour obtenir un environnement root de connexion complet, on utilise \texttt{su -} ou \texttt{sudo -i} ; \texttt{sudo su} est redondant.
+
+\capture{02-reseau-ssh.png}{Terminal de la VM : nom d'hôte, DHCP, route et service SSH actif.}
+
+\textbf{Adresse IP obtenue :} 10.50.12.135 \qquad \textbf{Interface :} ens18
+
+\newpage
+\section*{3. Phase 2 (suite) et phase 3 -- Paquets et utilisateurs}
+\textbf{Sources APT.} Le fichier \texttt{/etc/apt/sources.list} a été configuré avec les dépôts Debian Trixie et Trixie Security (\texttt{main contrib non-free}). Les commandes principales sont :
+\begin{verbatim}
+apt update             # actualise l'index des paquets
+apt upgrade            # met a jour les paquets installes
+apt install openssh-server man-db
+\end{verbatim}
+\texttt{dpkg} gère les paquets \texttt{.deb} localement : \texttt{dpkg -S /etc/ssh/ssh\_config} permet d'identifier le paquet propriétaire (\texttt{openssh-client}) ; \texttt{dpkg -S /etc/ssh/sshd\_config.d} vérifie le répertoire demandé ; \texttt{dpkg -L openssh-server} liste les fichiers du paquet.
+
+\textbf{Accès distant.} L'adresse IP a été recherchée dans \texttt{/var/lib/misc/dnsmasq.leases} sur \texttt{ill-sae13} en utilisant le nom de la VM ou son adresse MAC. La connexion se fait par les rebonds \texttt{sterne}, puis \texttt{ill-sae13}, puis \texttt{ssh utilisateur@IP\_VM}.
+
+\textbf{Utilisateurs.} Un compte a été ajouté avec \texttt{adduser}, puis testé en console et via SSH. \texttt{id}, \texttt{/etc/passwd}, \texttt{/etc/group} et \texttt{/etc/shadow} permettent de consulter les UID, GID et informations de compte (ne pas publier les données de \texttt{shadow}).
+
+Le compte \texttt{prof} a été créé sans interaction avec \textbf{UID 5000}, GID du groupe \texttt{www-data}, répertoire \texttt{/home/reserve} et connexion initialement désactivée :
+\begin{verbatim}
+adduser --disabled-login --uid 5000 --gid "$(id -g www-data)" \
+  --home /home/reserve --comment "" prof
+passwd prof
+chsh -s /bin/bash prof
+\end{verbatim}
+Après changement du mot de passe et du shell, la connexion a été vérifiée. \texttt{getent passwd} a été enregistré et comparé à \texttt{/etc/passwd} avec \texttt{diff} ; \texttt{getent} consulte les sources configurées par NSS (fichiers, LDAP, etc.).
+
+\capture{03-comptes-logs.png}{Utilisateur prof : UID/GID}
+
+\newpage
+\section*{4. Phase 3 -- Journaux, LVM et montage}
+\textbf{Journaux.} Les traces système sont dans \texttt{/var/log} ; l'historique des installations est notamment dans \texttt{/var/log/apt/history.log}. \texttt{rsyslog} a été installé pour disposer des fichiers journaux texte.
+\begin{verbatim}
+journalctl -u ssh                 # journal du service SSH
+journalctl -b                     # boot actuel
+journalctl -b -k                  # messages du noyau
+journalctl --since "3 hours ago" # trois dernieres heures
+dmesg --time-format=raw           # temps depuis le demarrage
+systemd-analyze time             # duree du demarrage
+\end{verbatim}
+Une connexion SSH correcte et une tentative avec mauvais mot de passe ont été recherchées dans les logs (\texttt{Accepted} / \texttt{Failed}). \texttt{dmesg} contient les messages du noyau ; \texttt{journalctl} regroupe aussi ceux des services. Selon la RFC 5424, les logs utilisent des \emph{facilities} et des niveaux de priorité (0 : \emph{emerg} à 7 : \emph{debug}).
+
+\textbf{LVM.} Les montages et les tailles ont été observés avec \texttt{mount}, \texttt{df -h}, \texttt{pvs}, \texttt{vgs} et \texttt{lvs}. Un PV est un volume physique, un VG un groupe de volumes et un LV un volume logique. L'UUID du système de fichiers racine est obtenu avec \texttt{findmnt -no SOURCE,UUID /} ; celui du LV avec \texttt{lvs -o lv\_path,lv\_uuid}.
+
+\textbf{Disque de 1 Gio.} Le disque supplémentaire a été identifié avec \texttt{lsblk} et \texttt{blkid}, partitionné avec \texttt{fdisk}, puis formaté en \texttt{ext4} avec \texttt{mkfs.ext4}. Une fois son UUID obtenu, il a été monté sur \texttt{/local} :
+\begin{verbatim}
+mkdir -p /local
+mount -U "$(blkid -s UUID -o value /dev/sdb1)" /local
+# /etc/fstab : UUID=<uuid_reel> /local ext4 defaults,nofail 0 2
+mount -a
+findmnt /local
+\end{verbatim}
+\emph{Remarque :} \texttt{/dev/sdb1} est un exemple ; le nom réel a été vérifié avant formatage. L'entrée dans \texttt{/etc/fstab} conserve le montage après redémarrage.
+
+
+
+\capture{04-disque-local.png}{LVM, disque de 1 Gio et montage permanent de /local.}
+
+\newpage
+\section*{5. Phase 3 -- Services, archives et commandes différées}
+\textbf{Nginx.} Le serveur a été installé par \texttt{apt install nginx}. Son état se vérifie avec \texttt{systemctl status nginx} ou \texttt{systemctl is-active nginx} ; il s'arrête avec \texttt{systemctl stop nginx}. La requête \texttt{curl http://localhost/} charge la page de bienvenue. Le texte \emph{Welcome} du fichier HTML par défaut (généralement \texttt{/var/www/html/index.nginx-debian.html}) a été remplacé par \emph{Bonjour}, puis vérifié avec :
+\begin{verbatim}
+curl -s http://localhost/ | grep Bonjour
+\end{verbatim}
+Les journaux sont dans \texttt{/var/log/nginx/access.log} et \texttt{error.log} ; la configuration est dans \texttt{/etc/nginx/}. L'appel \texttt{curl} apparaît dans \texttt{access.log} avec une requête \texttt{GET /}.
+
+\textbf{Systemctl.} Les services sont listés avec \texttt{systemctl list-units --type=service --all}, les actifs avec \texttt{--state=active}. \texttt{systemctl enable nginx} active le démarrage automatique ; \texttt{systemctl disable nginx} le désactive.
+
+\textbf{Archives DEB.} Le paquet \texttt{mc\_4.8.33-1.1\_amd64.deb} a été téléchargé par \texttt{curl}, puis extrait avec \texttt{dpkg-deb -R paquet.deb extraction}. Le programme se trouve sous \texttt{usr/bin/mc}. Le dossier \texttt{DEBIAN} fournit les métadonnées (\texttt{control}), dépendances et scripts éventuels. \texttt{dpkg -i} ne résout pas automatiquement les dépendances ; \texttt{apt install ./paquet.deb} tente de les installer. Le gestionnaire \texttt{mc} permet aussi de parcourir des archives.
+
+\textbf{Planification.} \texttt{crontab -l} affiche les tâches ; \texttt{crontab -e} les modifie. Les cinq champs sont minute, heure, jour du mois, mois, jour de semaine. La ligne suivante sauvegarde \texttt{/etc} chaque dimanche à \textbf{04 h 00} :
+\begin{verbatim}
+0 4 * * 0 /usr/bin/tar -czf /var/lib/sauvetarge-etc.tgz -C / etc
+\end{verbatim}
+\texttt{at} a été installé pour tester une tâche unique (non récurrente) :
+\begin{verbatim}
+echo "/usr/sbin/shutdown -h now" | at now + 5 minutes
+atq        # consulter les taches
+atrm NUM   # annuler si necessaire
+\end{verbatim}
+\capture{05-services-cron.png}{Nginx, page Bonjour, installation de mc et tâche crontab.}
+
+\textbf{Conclusion.} La VM Debian a été installée, configurée, administrée à distance et utilisée pour les comptes, journaux, disques, services, paquets et tâches programmées.
+\end{document}

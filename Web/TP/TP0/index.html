@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li>Accueil</li>
+                <li><a href="https://www.escal-ouest.com">Les horaires des bateaux</a></li>
+                <li><a href="plan.html">Consulter le plan d'île</a></li>
+            </ul>
+        </nav>
+    <main>    
+        <header>
+            <h1>Visite de l'île de Groix</h1>
+            <figure>
+                <img src="groix.jpg" alt="Plage de Groix">
+            </figure>
+        </header>
+
+        <section>
+            <p>Horaire de marées du 9 septembre 2026</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Etat</th>
+                        <th>Coef</th>
+                        <th>Heure</th>
+                        <th>Hauteur</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>PM</td>
+                        <td>76</td>
+                        <td>04h15</td>
+                        <td>4,76m</td>
+                    </tr>                    
+                    <tr>
+                        <td>BM</td>
+                        <td></td>
+                        <td>10h07</td>
+                        <td>1,38</td>                    
+                    </tr>
+                    <tr>
+                        <td>PM</td>
+                        <td>83</td>
+                        <td>16h30</td>
+                        <td>5,12m</td>
+                    </tr>                    
+                    <tr>
+                        <td>BM</td>
+                        <td></td>
+                        <td>22h41</td>
+                        <td>1,03m</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        <section>
+            <fieldset>
+                <legend>Recevez gratuitement un guide de l'île de Groix</legend>
+                <form>
+                    <br>
+                    <label for="email">Renseignez votre adresse e-mail :</label>
+                    <input type="email" id="email" name="email" required>
+                    <br><br>
+                    <label for="period">Choisissez la période pour laquelle vous souhaitez recevoir le guide :</label>
+                    <select id="period" name="period">
+                        <option value="ete">En été</option>
+                        <option value="automne">En automne</option>
+                        <option value="hiver">En hiver</option>
+                        <option value="printemps">Au printemps</option>
+                    </select>
+                    <br><br>
+                    <button type="reset">Réinitialiser</button>
+                    <button type="submit">Valider</button>
+                </form>
+            </fieldset>
+        </section>
+    </main>
+</body>
+</html>
