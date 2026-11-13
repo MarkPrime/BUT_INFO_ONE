@@ -71,17 +71,11 @@ class Exercice_3
         float sommeGrSc = 0;
         float moyMajor = 0;
         int nbEtu = 0;
-        float ue1 = 0;
-        float ue2 = 0;
-        float ue3 = 0;
-        float ue4 = 0;
-        float ue5 = 0;
-        float ue6 = 0;
         Etudiant etudiant;
         Etudiant[] etudiantMajor;
 
         noteInsert = new float[6];
-        etudiantMajor = new Etudiant[6];
+        etudiantMajor = new Etudiant[10];
         temp = new string[11];
 
         if (File.Exists("Promotion.csv"))
@@ -113,7 +107,9 @@ class Exercice_3
                 }
                 moyGroupePr = sommeGrPr / nbEtuGrPr;
                 moyGroupeSc = sommeGrSc / nbEtuGrSc;
-                
+
+                etudiantMajor[nbEtu] = etudiant;
+
                 afficherEtudiant(etudiant);
                 Console.WriteLine("\n");
                 nbEtu++;
@@ -122,9 +118,19 @@ class Exercice_3
             Console.WriteLine("Moyenne de Groupe 1 : " + moyGroupePr);
             Console.WriteLine("Moyenne de Groupe 2 : " + moyGroupeSc);
             Console.WriteLine("------------------------------------");
-            for (int f = 0; f < etudiantMajor.Length; f++)
+            Etudiant Major = etudiantMajor[0];
+            for (int f = 0; f < nbEtu; f++)
             {
-                afficherMajor(etudiantMajor[f], moyMajor, f);
+                for (int x = 0; x < nbEtu; x++)
+                {
+                    if (etudiantMajor[x].notes[f] > moyMajor)
+                    {
+                        moyMajor = etudiantMajor[x].notes[f];
+                        Major = etudiantMajor[x];
+                    }
+                }
+                afficherMajor(Major, moyMajor, f);
+                moyMajor = 0;
             }
             Etudiants.Close();
         }
