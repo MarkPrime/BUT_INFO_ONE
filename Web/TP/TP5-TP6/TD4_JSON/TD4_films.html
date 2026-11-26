@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TP Films - Recherches dans un flux JSON en JavaScript</title>
+	<link rel="stylesheet" href="TD4_style.css">
+</head>
+<body>
+    <h1>TP Films - Recherches dans un flux JSON en JavaScript</h1>
+    <p style="text-align: center; color: #777;">
+        Ce TP utilise un fichier JSON de 1000 films fictifs pour apprendre à effectuer des recherches en JavaScript.
+    </p>
+
+    <div class="stats" id="stats"></div>
+
+    <div class="exemple">
+        <h2>Etape 1 : Chargement des données</h2>
+        <p>Charger le fichier <code>films.json</code>.</p>
+        <button onclick="etape1()">Exécuter</button>
+        <div class="resultatExemple" id="resultatEt1"></div>
+    </div>
+
+    <div class="exemple">
+        <h2>Exemple 1 : Parcourir tout le flux JSON</h2>
+		<fieldset>
+			<code>
+				let resultat = "";<br>
+				for (let i = 0; i < films.length; i++) {<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;resultat = resultat + films[i].titre + "\n";<br>
+				}<br>
+				document.getElementById('resultatExemple1').textContent = resultat; //resultatTest1 est l'id de la div où afficher le résultat<br>
+			</code>
+		</fieldset>
+        <p>Afficher le titre de tous les films.</p>
+        <button onclick="exemple1()">Rechercher</button>
+        <div class="resultatExemple" id="resultatExemple1"></div>
+    </div>
+	
+    <div class="exemple">
+        <h2>Exemple 1bis : Parcourir tout le flux JSON avec un forEach</h2>
+		<fieldset>
+			<code>
+				let resultat = "";<br>
+				films.forEach((unFilm) => {<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;resultat = resultat + unFilm.titre  + "\n";<br>
+				});<br>
+				document.getElementById('resultatExemple1bis').textContent = resultat;<br>
+			</code>
+		</fieldset>
+        <p>Afficher le titre de tous les films.</p>
+        <button onclick="exemple1bis()">Rechercher</button>
+        <div class="resultatExemple" id="resultatExemple1bis"></div>
+    </div>	
+
+    <div class="exemple">
+        <h2>Exemple 2 : Parcourir tout le flux JSON avec un critère de recherche</h2>
+		<fieldset>
+			<code>
+				let resultat = "";<br>
+				films.forEach((unFilm) => {<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;if(unFilm.annee === 2020){<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resultat = resultat + unFilm.titre + " - " + unFilm.genre +  "\n";<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+				});<br>
+				document.getElementById('resultatExemple2').textContent = resultat;
+			</code>
+		</fieldset>
+        <p>Afficher le titre et le genre des films de l'année 2020.</p>
+        <button onclick="exemple2()">Rechercher</button>
+        <div class="resultatExemple" id="resultatExemple2"></div>
+    </div>
+
+
+    <div class="exemple">
+        <h2>Exemple 3 : Afficher des objets films sélectionnés</h2>
+		<fieldset>
+			<code>
+				let resultat = []; //Déclaration d'un tableau<br>
+				films.forEach((unFilm) => {<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;if(unFilm.langue === 'Portugais'){<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resultat.push(unFilm);<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+				});<br>
+				
+				afficherResultats(resultat, 'resultatTest3'); //Procédure qui affiche le résultat sous la forme d'un tableau HTML<br>
+				//Le 1er paramètre est un tableau !<br>
+				//Le 2ème paramètre est l'id de la div où afficher le résultat<br>
+			</code>
+		</fieldset>			
+        <p>Afficher les films en langue portugaise.</p>
+        <button onclick="exemple3()">Rechercher</button>
+        <div class="resultatExemple" id="resultatExemple3"></div>
+    </div>
+	
+	
+    <div class="exercice">
+        <h2>Exercice 1 - Recherche selon plusieurs critères</h2>
+        <p>Déterminer le nombre de films appartenant au genre principal "Science-fiction" sortis avant l'an 2000.</p>
+		<p class="contrainte">Contrainte : sans utiliser forEach !</p>
+        <button onclick="exercice1()">Rechercher</button>
+        <div class="resultat" id="resultatEx1"></div>
+    </div>    
+	
+    <div class="exercice">
+        <h2>Exercice 2 - Recherche avec parcours de tableau</h2>
+        <p>Afficher les acteurs, le nom du cinéma et les horaires du film "La nuit et l'argile".</p>
+		<p class="contrainte">Contrainte : utiliser un while pour s'arrêter lorsque le film est trouvé !</p>			
+        <button onclick="exercice2()">Rechercher</button>
+        <div class="resultat" id="resultatEx2"></div>
+    </div>  	
+
+    <div class="exercice">
+        <h2>Exercice 3 : Recherche par mot clé</h2>
+        <p>Chercher tous les films dont le titre contient un mot saisi par l'utilisateur (insensible à la casse).</p>
+
+		<fieldset>
+			<code>
+				Pour info : la fonction toLowerCase() convertit une chaine en minuscule, par exemple : <br>
+				let chMaj = "BONJOUR";<br>
+				let chMin = chMaj.toLowerCase();	//chMin sera affecté de "bonjour"<br><br>
+				
+				La fonction includes() indique si une sous-chaîne est présente (true ou false) dans une chaîne, par exemple :<br>
+				let uneChaine = "Bonjour";<br>
+				let res = uneChaine.includes("jour");	//Dans ce cas res sera affecté de true<br><br>
+				La fonction includes() fonctionne aussi sur un tableau, par exemple : <br>
+				const fruits = ["pomme", "banane", "orange"];<br>
+				console.log(fruits.includes("banane")); // Affichera true<br>
+				console.log(fruits.includes("kiwi"));   // Affichera false<br><br>
+			</code>		
+		</fieldset>		
+        <input type="text" id="titreRecherche" placeholder="Ex: Nuit" style="padding: 8px; width: 200px; margin: 5px;">
+        <button onclick="exercice3()">Rechercher</button>
+        <div class="resultat" id="resultatEx3"></div>
+    </div>
+
+    <div class="exercice">
+        <h2>Exercice 4 : Recherche avec choix dans une comboBox</h2>
+        <p>Chercher tous les films d'un genre donné (genre principal ou dans le tableau des genres).</p>
+        <select id="genreRecherche" style="padding: 8px; width: 200px; margin: 5px;">
+            <option value="">-- Choisir un genre --</option>
+        </select>
+        <button onclick="exercice4()">Rechercher</button>
+        <div class="resultat" id="resultatEx4"></div>
+    </div>
+
+    <div class="exercice">
+        <h2>Exercice 5 : Cumul et moyenne</h2>
+        <p>Calculer et afficher le chiffre d'affaires d'un pays choisi ainsi que la moyenne des recettes des films de ce pays.</p>
+		<fieldset>
+			<code>
+				Pour information les montants sont exprimés en millions d'euros (M€)<br><br>
+				Voici le résultat attendu pour la France :<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;Chiffre d'affaires : 4120.29 M€<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;Recette moyenne : 43.37 M€ pour 95 films<br>
+				<br><br>
+				La fonction toFixed() renvoie le nombre arrondi au nombre de décimales passé en paramètre sous la forme d'une chaîne de caractères, par exemple :<br>
+				let unNombre = 123.45847;<br>
+				console.log(unNombre.toFixed(2));	//Affichera 123.46<br>
+				<br>
+			</code>
+		</fieldset>
+        <select id="paysRecherche" style="padding: 8px; width: 200px; margin: 5px;">
+            <option value="">-- Choisir un pays --</option>
+        </select>
+        <button onclick="exercice5()">Rechercher</button>
+        <div class="resultat" id="resultatEx5"></div>
+    </div>
+	
+    <div class="exemple">
+        <h2>Méthodes de recherches et de traitement des tableaux en javaScript</h2>
+        <p>JavaScript propose plusieurs méthodes permettant de parcourir un tableau afin de rechercher des éléments ou d'effectuer des traitements.
+Nous allons étudier quatre méthodes : filter(), find(), some() et reduce().</p>
+        <p>1. La méthode filter() - permet de récupérer tous les éléments d'un tableau qui respectent une condition.<br>
+				->Elle retourne un nouveau tableau contenant les éléments sélectionnés.<br>
+				Syntaxe : let resultat = tableau.filter(element => condition);</p>
+			<fieldset>
+				<code>
+					Exemple 4 : Rechercher tous les films diffusés à l'UGC Les Halles.<br><br>
+					const resultats = films.filter(film =><br>
+					&nbsp;&nbsp;&nbsp;&nbsp;film.cinema === "UGC Les Halles"<br>
+					);<br>
+					afficherResultats(resultats, 'resultatExemple4');<br><br>
+					
+					//Ce code équivaut à :<br>
+					let resultats = [];<br>
+					films.forEach((unFilm) => {<br>
+					&nbsp;&nbsp;&nbsp;&nbsp;if(unFilm.cinema === 'UGC Les Halles'){<br>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resultats.push(unFilm);<br>
+					&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+					});<br>
+				</code>
+			</fieldset>
+        <button onclick="exemple4()">Rechercher</button>
+        <div class="resultatExemple" id="resultatExemple4"></div>		
+    </div>	
+
+    <div class="exemple">
+        <h2>Méthodes de recherches et de traitement des tableaux en javaScript</h2>
+
+        <p>2. La méthode find() : permet de rechercher le premier élément d'un tableau qui respecte une condition.<br>
+			->Elle retourne directement l'élément trouvé et non un tableau. Si aucun film ne correspond à la condition, la méthode retourne undefined.<br>
+			Syntaxe : let resultat = tableau.find(element => condition);<br>
+			Exemple :<br>
+			Rechercher un film dont le titre est « Le rêve et le cristal ».<br>
+			let resultat = films.find(film =><br>
+			&nbsp;&nbsp;&nbsp;&nbsp;film.titre === "Le rêve et le cristal"<br>
+			);<br>
+			
+			La variable resultat contient l'objet correspondant au film.<br>
+
+		</p>
+			<fieldset>
+				<code>
+					Exemple 5 : Rechercher le film dont le tritre est "Le rêve et le cristal"<br><br>
+					const unFilm = films.find(film =><br>
+					&nbsp;&nbsp;&nbsp;&nbsp;film.titre === "Le rêve et le cristal"<br>
+					);<br>
+					let resultat = [];<br>
+					if (unFilm !== undefined){<br>
+					&nbsp;&nbsp;&nbsp;&nbsp;resultat.push(unFilm);<br>
+					}<br>
+					afficherResultats(resultat,'resultatExemple5');<br><br>
+					
+					//Ce code équivaut à :<br>
+					let unFilm;<br>
+					let i = 0;<br>
+					trouve = false;<br>
+					while(i < films.length && !trouve){<br>
+					&nbsp;&nbsp;&nbsp;&nbsp;if(films[i].titre === 'Le rêve et le cristal'){<br>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unFilm = film[i];<br>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;trouve = true;<br>
+					&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+					&nbsp;&nbsp;&nbsp;&nbsp;else{<br>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i++;<br>
+					&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+					}<br>
+				</code>
+			</fieldset>
+        <button onclick="exemple5()">Rechercher</button>
+        <div class="resultatExemple" id="resultatExemple5"></div>		
+    </div>	
+
+    <div class="exemple">
+        <h2>Méthodes de recherches et de traitement des tableaux en javaScript</h2>
+
+        <p>3. La méthode some() : permet de vérifier une condition avec une réponse booleéenne<br>
+		Syntaxe : let resultat = tableau.find(element => condition);<br>
+			Exemple :<br>
+			Vérifier si l'actrice Anaïs Demoustier joue dans au moins un film.<br>
+			let resultat = films.some(film =><br>
+			&nbsp;&nbsp;&nbsp;&nbsp;film.acteurs.includes("Anaïs Demoustier")<br>
+			);<br>
+			La variable resultat contient true ou false en fonction du résultat.<br>
+
+		</p>
+			<fieldset>
+				<code>
+					Exemple 6 : l'actrice "Anaïs Demoustier" joue t-elle dans au moins un film ?<br><br>
+					const reponsePositive = films.some(film =><br>
+					&nbsp;&nbsp;&nbsp;&nbsp;film.acteurs.includes("Anaïs Demoustier")<br>
+					);<br>
+					let resultat;<br>
+					if(reponsePositive){<br>
+					&nbsp;&nbsp;&nbsp;&nbsp;resultat = "Oui, Anaïs Demoustier joue dans 1 ou plusieurs films";<br>
+					}<br>
+					else{<br>
+					&nbsp;&nbsp;&nbsp;&nbsp;resultat = "Non, Anaïs Demoustier ne joue dans aucun film";<br>
+					}<br>
+					document.getElementById('resultatExemple6').textContent = resultat;<br>
+					<br><br>
+					//Ce code équivaut à :<br>
+					let reponsePositive = false;<br>
+					let i = 0;<br>
+					while(i < films.length && !reponsePositive){<br>
+					&nbsp;&nbsp;&nbsp;&nbsp;if(films[i].acteurs.includes("Anaïs Demoustier"){<br>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reponsePositive = true;<br>
+					&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+					&nbsp;&nbsp;&nbsp;&nbsp;else{<br>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i++;<br>
+					&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+					}<br>
+				</code>
+			</fieldset>
+        <button onclick="exemple6()">Rechercher</button>
+        <div class="resultatExemple" id="resultatExemple6"></div>		
+    </div>	
+	
+    <div class="exemple">
+        <h2>Méthodes de recherches et de traitement des tableaux en javaScript</h2>
+
+        <p>4. La méthode reduce() : permet de cumuler une valeur avec une donnée du flux JSON<br>
+		Syntaxe : let resultat = tableau.reduce((accumulateur, element) => {<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return accumulateur + element.valeur;<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},valeur d'initialisation );<br>
+		<br>
+			Exemple :<br>
+			Quel est le chiffre d'affaires cumulé de tous les films ?<br>
+			let caCumule = films.reduce((ca,film) =>{<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return ca + film.recettes;<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},0);<br>
+			La variable caCumule contient le cumul des recettes de tous les films.<br>
+
+		</p>
+			<fieldset>
+				<code>
+					Exemple 7 : Quel est le chiffre d'affaires cumulé de tous les films ?<br><br>
+					let caCumule = films.reduce((ca,film) =>{<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return ca + film.recettes;<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},0);<br>
+					<br>
+					const resultat = "Chiffre d'affaires cumulé de tous les films : " + caCumule.toFixed(2) + " M€";<br>
+					document.getElementById('resultatExemple7').textContent = resultat;<br><br><br>
+					
+					//Ce code équivaut à :<br>
+					let caCumule = 0;<br>
+					films.forEach((unFilm) => {<br>
+					&nbsp;&nbsp;&nbsp;&nbsp;caCumule = caCumule + unFilm.recettes;<br>
+					});<br><br>
+				</code>
+			</fieldset>
+        <button onclick="exemple7()">Rechercher</button>
+        <div class="resultatExemple" id="resultatExemple7"></div>		
+    </div>		
+
+    <div class="exercice">
+        <h2>Exercice 6 : Recherche dans fourchette de valeurs</h2>
+        <p>Chercher tous les films sortis dans une plage d'années.</p>
+		<p class="contrainte">Contrainte : Utiliser la méthode filter</p>
+        <input type="number" id="anneeDebut" placeholder="Ex: 2000" style="padding: 8px; width: 100px; margin: 5px;">
+        <span>à</span>
+        <input type="number" id="anneeFin" placeholder="Ex: 2020" style="padding: 8px; width: 100px; margin: 5px;">
+        <button onclick="exercice6()">Rechercher</button>
+        <div class="resultat" id="resultatEx6"></div>
+    </div>
+
+    <div class="exercice">
+        <h2>Exercice 7 : Vérifier l'existance d'un réalisateur</h2>
+        <p>Existe t-il au moins un film du réalisateur Hayao Miyazaki ?</p>
+        <button onclick="exercice7()">Rechercher</button>
+        <div class="resultat" id="resultatEx7"></div>
+    </div>
+
+    <div class="exercice">
+        <h2>Exercice 8 : Plusieurs critères de recherches</h2>
+        <p>Afficher tous les films de l'actrice Cate Blanchett du genre "Western".</p>
+		<p class="contrainte">Attention, le genre peut être présent dans genre et/ou genres.</p>
+        <button onclick="exercice8()">Rechercher</button>
+        <div class="resultat" id="resultatEx8"></div>
+    </div>
+	
+	
+    <div class="exercice">
+        <h2>Exercice 9 : Cumul + choix dans une comboBox</h2>
+        <p>Quel est le total des budgets pour le genre principal choisi ?</p>
+        <select id="genreRecherche2" style="padding: 8px; width: 200px; margin: 5px;">
+            <option value="">-- Choisir un genre --</option>
+        </select>
+        <button onclick="exercice9()">Rechercher</button>
+        <div class="resultat" id="resultatEx9"></div>
+    </div>
+
+    <div class="exemple">
+        <h2>Dictionnaire associatif en javaScript : map</h2>
+
+        <p>Un objet map permet de manipuler une collection de clé/valeur<br>
+		Syntaxe : let genres = new Map(); // par exemple on veut connaître le nombre de films par genre -> map de type string/number</p> <br>
+		Les primitives :<br>
+		
+		<table>
+			<tr><th>Méthodes et propriétés</th><th>Rôle</th><th>Exemple</th></tr>
+			<tr><td>set(clé, valeur)</td><td>Ajouter ou modifier une entrée</td><td>genres.set("Drame", 25)</td></tr>
+			<tr><td>get(clé)</td><td>Récupérer une valeur</td><td>genres.get("Drame")</td></tr>
+			<tr><td>has(clé)</td><td>Vérifier si une clé existe</td><td>genres.has("Drame")</td></tr>
+			<tr><td>delete(clé)</td><td>Supprimer une entrée</td><td>genres.delete("Drame")</td></tr>
+			<tr><td>clear()</td><td>Vider la Map</td><td>genres.clear()</td></tr>	
+			<tr><td>size</td><td>Nombre d'entrées</td><td>Console.log(genres.size)</td></tr>	
+			<tr><td>forEach()</td><td>Parcourir toutes les entrées</td><td></td></tr>	
+			<tr><td>keys()</td><td>Obtenir un itérateur sur les clés</td><td></td></tr>	
+			<tr><td>values()</td><td>Obtenir un itérateur sur les valeurs</td><td></td></tr>	
+			<tr><td>entries()</td><td>Obtenir un itérateur sur les couples clé/valeur</td><td></td></tr>				
+		</table>
+		
+
+		<fieldset>
+			<code>
+				Exemple forEach : Parcourir les clés et les valeurs<br><br>
+				genres.forEach((valeur, cle) => {<br>
+				&nbsp;&nbsp;&nbsp;console.log(cle + " : " + valeur);<br>
+				});<br><br>
+				<hr>
+				Exemple keys : Parcourir les clés<br><br>					
+				for (const genre of genres.keys()) {<br>
+				&nbsp;&nbsp;&nbsp;console.log(genre);<br>
+				}<br><br>
+				<hr>
+				Exemple values : Parcourir les valeurs<br><br>						
+				for (const nombre of genres.values()) {<br>
+				&nbsp;&nbsp;&nbsp;console.log(nombre);<br>
+				}<br><br>
+				<hr>
+				Exemple values : Parcourir les couples clé/valeur<br><br>
+				for (const [genre, nombre] of genres.entries()) {<br>
+				&nbsp;&nbsp;&nbsp;console.log(genre + " : " + nombre);<br>
+				}<br><br>
+			</code>
+		</fieldset>
+    </div>	
+	
+    <div class="exercice">
+        <h2>Exercice 10 : Créer et afficher une map string/number</h2>	
+		<p>Créer une map qui permet de connaître le nombre de films de chaque genre principal puis afficher le résultat sous la forme :</p>
+        <p>Science-fiction : 125 films<br>
+			Comédie         : 180 films<br>
+			Drame           : 210 films<br>
+			Action          : 95 films<br>
+			...<br>
+			-->15 genres répertoriés</p>
+        <button onclick="exercice10()">Rechercher</button>
+        <div class="resultat" id="resultatEx10"></div>
+    </div>
+
+    <div class="exercice">
+        <h2>Exercice 11 : Créer une map autour de l'attribut "streaming" permettant de stocker un résultat qui vous parait pertinent.</h2>	
+		<p> A vous de jouer...</p>
+        <button onclick="exercice11()">Rechercher</button>
+        <div class="resultat" id="resultatEx11"></div>
+    </div>
+ 
+	<script src="TD4_script.js"></script>
+</body>
+</html>

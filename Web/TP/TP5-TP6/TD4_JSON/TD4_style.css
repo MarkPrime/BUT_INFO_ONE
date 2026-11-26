@@ -1,0 +1,150 @@
+body {
+	font-family: Arial, sans-serif;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 20px;
+	background-color: #f5f5f5;
+}
+h1 {
+	color: #333;
+	text-align: center;
+}
+.exercice {
+	background: white;
+	border-radius: 8px;
+	padding: 20px;
+	margin: 20px 0;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.exemple {
+	background: white;
+	border-radius: 8px;
+	padding: 20px;
+	margin: 20px 0;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.exercice h2 {
+	color: #2c3e50;
+	margin-top: 0;
+}
+.exercice p {
+	color: #555;
+	line-height: 1.6;
+}
+
+p.contrainte {
+	color: red;
+}
+.resultat {
+	background: #e8f4fd;
+	border-left: 4px solid #3498db;
+	padding: 15px;
+	margin: 15px 0;
+	border-radius: 4px;
+	font-family: monospace;
+	white-space: pre-wrap;
+	max-height: 300px;
+	overflow-y: auto;
+}
+
+.resultatExemple {
+	background: #f9fde8;
+	border-left: 4px solid #34db8a;
+	padding: 15px;
+	margin: 15px 0;
+	border-radius: 4px;
+	font-family: monospace;
+	white-space: pre-wrap;
+	max-height: 300px;
+	overflow-y: auto;
+}
+.exercice button {
+	background: #3498db;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 14px;
+	margin: 5px;
+}
+
+.exemple button {
+	background: #34db8a;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 14px;
+	margin: 5px;
+}
+.exercice button:hover {
+	background: #2980b9;
+}
+
+.exemple button:hover {
+	background: #3a8c5f;
+}
+.stats {
+	display: flex;
+	gap: 20px;
+	flex-wrap: wrap;
+	margin: 20px 0;
+}
+.stat-card {
+	background: white;
+	border-radius: 8px;
+	padding: 15px;
+	flex: 1;
+	min-width: 200px;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+	text-align: center;
+}
+.stat-card h3 {
+	margin: 0 0 10px 0;
+	color: #2c3e50;
+}
+.stat-card .valeur {
+	font-size: 2em;
+	font-weight: bold;
+	color: #3498db;
+}
+.stat-card .label {
+	color: #777;
+	font-size: 0.9em;
+}
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 15px 0;
+}
+th, td {
+	border: 1px solid #ddd;
+	padding: 8px;
+	text-align: left;
+}
+.exercice th {
+	background: #3498db;
+	color: white;
+}
+
+.exemple th {
+	background: #34db8a;
+	color: white;
+}
+
+tr:nth-child(even) {
+	background: #f2f2f2;
+}
+.badge {
+	display: inline-block;
+	background: #3498db;
+	color: white;
+	padding: 2px 8px;
+	border-radius: 12px;
+	font-size: 0.8em;
+	margin: 2px;
+}
